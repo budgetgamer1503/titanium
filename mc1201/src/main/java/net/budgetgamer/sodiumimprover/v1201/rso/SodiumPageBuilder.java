@@ -2,12 +2,14 @@ package net.budgetgamer.sodiumimprover.v1201.rso;
 
 import net.budgetgamer.sodiumimprover.config.ConfigManager;
 import net.budgetgamer.sodiumimprover.config.ImproverConfig;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.MappingResolver;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -58,7 +60,7 @@ public final class SodiumPageBuilder {
                 }
             }
 
-            if (pagesList == null) {
+            if (pagesList == null || pagesList.isEmpty()) {
                 return;
             }
 
@@ -72,9 +74,28 @@ public final class SodiumPageBuilder {
             Class<?> optionPageClass = firstPage.getClass();
             String sodiumPkg = optionPageClass.getPackage().getName();
 
-            Class<?> textClass = Class.forName("net.minecraft.text.Text");
-            Method literalMethod = textClass.getMethod("literal", String.class);
-            Object pageName = literalMethod.invoke(null, "Sodium Improver");
+            MappingResolver resolver = FabricLoader.getInstance().getMappingResolver();
+            String textClassName = resolver.mapClassName("intermediary", "net.minecraft.class_2561");
+            Class<?> textClass = Class.forName(textClassName);
+
+            Method textFactory = null;
+            for (Method m : textClass.getMethods()) {
+                if (Modifier.isStatic(m.getModifiers()) &&
+                    m.getParameterCount() == 1 &&
+                    m.getParameterTypes()[0].equals(String.class) &&
+                    textClass.isAssignableFrom(m.getReturnType())) {
+                    textFactory = m;
+                    if ("literal".equals(m.getName()) || "of".equals(m.getName())) {
+                        break;
+                    }
+                }
+            }
+
+            if (textFactory == null) {
+                return;
+            }
+
+            Object pageName = textFactory.invoke(null, "Sodium Improver");
 
             Class<?> optionGroupClass = Class.forName(sodiumPkg + ".OptionGroup");
             Method createGroupBuilderMethod = optionGroupClass.getMethod("createBuilder");
@@ -107,7 +128,7 @@ public final class SodiumPageBuilder {
 
             createToggle(
                 createOptionBuilderMethod, addOptionMethod, groupBuilder, storageProxy,
-                textClass, literalMethod, optionBindingClass, genericBindingClass, tickBoxControlClass,
+                textClass, textFactory, optionBindingClass, genericBindingClass, tickBoxControlClass,
                 "Entity Culling", "Culls mobs, animals, and items outside camera view for higher FPS",
                 cfg -> cfg.entityCullingEnabled,
                 (cfg, val) -> { cfg.entityCullingEnabled = val; ConfigManager.save(); }
@@ -115,7 +136,7 @@ public final class SodiumPageBuilder {
 
             createToggle(
                 createOptionBuilderMethod, addOptionMethod, groupBuilder, storageProxy,
-                textClass, literalMethod, optionBindingClass, genericBindingClass, tickBoxControlClass,
+                textClass, textFactory, optionBindingClass, genericBindingClass, tickBoxControlClass,
                 "Tile Entity Culling", "Culls chests, hoppers, banners, and signs to stop storage room lag",
                 cfg -> cfg.tileEntityCullingEnabled,
                 (cfg, val) -> { cfg.tileEntityCullingEnabled = val; ConfigManager.save(); }
@@ -123,7 +144,7 @@ public final class SodiumPageBuilder {
 
             createToggle(
                 createOptionBuilderMethod, addOptionMethod, groupBuilder, storageProxy,
-                textClass, literalMethod, optionBindingClass, genericBindingClass, tickBoxControlClass,
+                textClass, textFactory, optionBindingClass, genericBindingClass, tickBoxControlClass,
                 "Dynamic Frame Pacer", "Dynamically tunes render load during FPS drops to eliminate stutter",
                 cfg -> cfg.dynamicFramePacerEnabled,
                 (cfg, val) -> { cfg.dynamicFramePacerEnabled = val; ConfigManager.save(); }
@@ -131,7 +152,7 @@ public final class SodiumPageBuilder {
 
             createToggle(
                 createOptionBuilderMethod, addOptionMethod, groupBuilder, storageProxy,
-                textClass, literalMethod, optionBindingClass, genericBindingClass, tickBoxControlClass,
+                textClass, textFactory, optionBindingClass, genericBindingClass, tickBoxControlClass,
                 "Cull Monster Mobs", "Skips rendering zombies, skeletons, and other hostile mobs behind walls",
                 cfg -> cfg.cullMonsterMobs,
                 (cfg, val) -> { cfg.cullMonsterMobs = val; ConfigManager.save(); }
@@ -139,7 +160,7 @@ public final class SodiumPageBuilder {
 
             createToggle(
                 createOptionBuilderMethod, addOptionMethod, groupBuilder, storageProxy,
-                textClass, literalMethod, optionBindingClass, genericBindingClass, tickBoxControlClass,
+                textClass, textFactory, optionBindingClass, genericBindingClass, tickBoxControlClass,
                 "Cull Item Drops", "Skips rendering floating dropped items outside camera frustum",
                 cfg -> cfg.cullItemDrops,
                 (cfg, val) -> { cfg.cullItemDrops = val; ConfigManager.save(); }
@@ -147,7 +168,7 @@ public final class SodiumPageBuilder {
 
             createToggle(
                 createOptionBuilderMethod, addOptionMethod, groupBuilder, storageProxy,
-                textClass, literalMethod, optionBindingClass, genericBindingClass, tickBoxControlClass,
+                textClass, textFactory, optionBindingClass, genericBindingClass, tickBoxControlClass,
                 "Cull Item Frames & Stands", "Skips rendering item frames and armor stands outside field of view",
                 cfg -> cfg.cullItemFrames,
                 (cfg, val) -> { cfg.cullItemFrames = val; cfg.cullArmorStands = val; ConfigManager.save(); }
@@ -164,15 +185,13 @@ public final class SodiumPageBuilder {
             Object improverPage = pageConstructor.newInstance(pageName, groupsList);
 
             pagesList.add(improverPage);
-            System.out.println("[Sodium Improver] Injected option page into Sodium successfully");
-        } catch (Throwable t) {
-            System.err.println("[Sodium Improver] Failed to inject options page into Sodium: " + t.getMessage());
+        } catch (Throwable ignored) {
         }
     }
 
     private static void createToggle(
             Method createOptionBuilderMethod, Method addOptionMethod, Object groupBuilder, Object storageProxy,
-            Class<?> textClass, Method literalMethod, Class<?> optionBindingClass, Class<?> genericBindingClass,
+            Class<?> textClass, Method textFactory, Class<?> optionBindingClass, Class<?> genericBindingClass,
             Class<?> tickBoxControlClass,
             String name, String tooltip,
             Function<ImproverConfig, Boolean> getter,
@@ -182,10 +201,10 @@ public final class SodiumPageBuilder {
             Object builder = createOptionBuilderMethod.invoke(null, Boolean.class, storageProxy);
 
             Method setName = builder.getClass().getMethod("setName", textClass);
-            setName.invoke(builder, literalMethod.invoke(null, name));
+            setName.invoke(builder, textFactory.invoke(null, name));
 
             Method setTooltip = builder.getClass().getMethod("setTooltip", textClass);
-            setTooltip.invoke(builder, literalMethod.invoke(null, tooltip));
+            setTooltip.invoke(builder, textFactory.invoke(null, tooltip));
 
             Constructor<?> bindingConstructor = genericBindingClass.getConstructor(BiConsumer.class, Function.class);
             Object binding = bindingConstructor.newInstance(setter, getter);

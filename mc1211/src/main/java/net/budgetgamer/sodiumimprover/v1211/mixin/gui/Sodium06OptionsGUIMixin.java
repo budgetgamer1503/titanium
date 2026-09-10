@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class Sodium06OptionsGUIMixin {
 
     @Inject(method = "<init>", at = @At("RETURN"), remap = false, require = 0)
-    private void onInit(Object prevScreen, CallbackInfo ci) {
+    private void onInit(CallbackInfo ci) {
         SodiumPageBuilder.injectImproverPage(this);
     }
 }
