@@ -7,7 +7,9 @@
     "culling.EntityRenderDispatcherMixin",
     "culling.BlockEntityRenderDispatcherMixin",
     "culling.ParticleManagerMixin",
-    "culling.WorldRendererMixin"
+    "culling.WorldRendererMixin",
+    "gui.Sodium05OptionsGUIMixin",
+    "gui.Sodium06OptionsGUIMixin"
   ],
   "injectors": {
     "defaultRequire": 0
