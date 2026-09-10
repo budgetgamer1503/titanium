@@ -1,0 +1,11 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    api 'com.google.code.gson:gson:2.10.1'
+}
+
+jar {
+    archiveBaseName = 'SodiumImprover-common'
+}
