@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "sodiumimprover",
+  "version": "1.0.0",
+  "name": "Sodium Improver",
+  "description": "Extreme FPS Booster & Renderer Optimizer companion for Sodium by budgetgamer1503",
+  "authors": [
+    "budgetgamer1503"
+  ],
+  "contact": {
+    "homepage": "https://github.com/budgetgamer1503/SodiumImprover"
+  },
+  "license": "LGPL-3.0",
+  "icon": "assets/sodiumimprover/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "net.budgetgamer.sodiumimprover.v1165.SodiumImprover1165"
+    ]
+  },
+  "mixins": [
+    "sodiumimprover.mixins.json"
+  ],
+  "custom": {
+    "modmenu": {
+      "parent": "sodium"
+    }
+  },
+  "depends": {
+    "fabricloader": ">=0.14.0",
+    "minecraft": ">=1.16.0 <=1.16.5",
+    "sodium": ">=0.2.0"
+  },
+  "suggests": {
+    "entityculling": "*",
+    "moreculling": "*",
+    "immediatelyfast": "*",
+    "enhancedblockentities": "*",
+    "reeses-sodium-options": "*",
+    "sodium-extra": "*",
+    "ferritecore": "*"
+  }
+}

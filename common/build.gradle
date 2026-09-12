@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     api 'com.google.code.gson:gson:2.10.1'
+    compileOnly 'net.fabricmc:fabric-loader:0.15.11'
 }
 
 jar {

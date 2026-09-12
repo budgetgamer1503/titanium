@@ -12,6 +12,7 @@ public class SodiumImprover1201 implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ConfigManager.init(FabricLoader.getInstance().getConfigDir().toFile());
+        net.budgetgamer.sodiumimprover.core.CompatibilityManager.init();
         RSOOptionRegister.register();
     }
 }

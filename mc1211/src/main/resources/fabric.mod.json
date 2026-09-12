@@ -28,10 +28,16 @@
   },
   "depends": {
     "fabricloader": ">=0.15.0",
-    "minecraft": ">=1.21.0 <=1.26.2"
+    "minecraft": ">=1.21.0 <=1.26.2",
+    "sodium": ">=0.2.0"
   },
   "suggests": {
-    "sodium": "*",
-    "reeses-sodium-options": "*"
+    "entityculling": "*",
+    "moreculling": "*",
+    "immediatelyfast": "*",
+    "enhancedblockentities": "*",
+    "reeses-sodium-options": "*",
+    "sodium-extra": "*",
+    "ferritecore": "*"
   }
 }

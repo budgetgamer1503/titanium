@@ -4,7 +4,30 @@
 **Mod ID**: `sodiumimprover`  
 **License**: LGPL-3.0  
 
-Sodium Improver is an all-in-one renderer optimization and companion mod for Sodium on Minecraft. It targets the areas of rendering that Sodium leaves un-optimized: entity frustum and distance culling, tile entity / block entity culling (chests, hoppers, banners, signs), particle throttling, and dynamic frame-pacing.
+Sodium Improver is an all-in-one renderer optimization and companion mod for **Sodium** on Minecraft Fabric. It targets the areas of rendering that Sodium leaves un-optimized: entity frustum and distance culling, tile entity / block entity culling (chests, hoppers, banners, signs), particle throttling, and dynamic frame-pacing.
+
+---
+
+## Required Dependencies
+
+- **Fabric Loader**: `>=0.14.0` (or `>=0.15.0` on 1.20.6 / 1.21.1+)
+- **Sodium**: `>=0.2.0` (Mandatory - works across all Sodium 0.2.x - 0.6.x+ releases)
+
+---
+
+## Companion Mod Synergies & Optional Dependencies
+
+Sodium Improver contains an intelligent runtime `CompatibilityManager` that automatically detects and synergizes with popular rendering and performance mods:
+
+| Mod | Mod ID | Synergy / Optimization Behavior |
+| --- | --- | --- |
+| **Entity Culling** | `entityculling` | **Drastically reduces background raytrace load.** Sodium Improver's instantaneous frustum and dynamic distance culling eliminate off-screen and distant entities first, sparing EntityCulling's background raytracer from redundant voxel traversal. |
+| **More Culling** | `moreculling` | **Conflict-free coordination.** Harmonizes block entity and sign culling to prevent conflicting cancellation or matrix stack anomalies. |
+| **Enhanced Block Entities (EBE)** | `enhancedblockentities` | **Chunk mesh awareness.** Automatically detects when chests, bells, and signs are converted into baked chunk meshes, bypassing redundant block entity dispatcher checks. |
+| **ImmediatelyFast** | `immediatelyfast` | **Immediate-mode rendering boost.** Coordinates immediate mode batching with culling passes. |
+| **Reese's Sodium Options** | `reeses-sodium-options` | Injects a dedicated vertical configuration tab directly into Sodium's settings screen. |
+| **Sodium Extra** | `sodium-extra` | Seamlessly co-exists alongside Sodium Extra's detail sliders. |
+| **FerriteCore** | `ferritecore` | Memory reduction pairs with Sodium Improver's renderer memory and draw-call savings. |
 
 ---
 
@@ -29,24 +52,43 @@ Sodium Improver is an all-in-one renderer optimization and companion mod for Sod
 
 ## Supported Versions
 
-- Minecraft 1.16.5
-- Minecraft 1.17.1
-- Minecraft 1.18.2
-- Minecraft 1.19.x
-- Minecraft 1.20.1 / 1.20.2 / 1.20.4
-- Minecraft 1.21.x / 1.21.1
-- Forward-compatible with future updates (26.2 / 1.26+)
+| Minecraft Version | Module | Target Range | Status |
+| --- | --- | --- | --- |
+| **1.16.5** | `mc1165` | `1.16.0` - `1.16.5` | ✅ Fully Supported |
+| **1.17.1** | `mc1171` | `1.17.0` - `1.17.1` | ✅ Fully Supported |
+| **1.18.2** | `mc1182` | `1.18.0` - `1.18.2` | ✅ Fully Supported |
+| **1.19.4** | `mc1194` | `1.19.0` - `1.19.4` | ✅ Fully Supported |
+| **1.20.1** | `mc1201` | `1.20.0` - `1.20.4` | ✅ Fully Supported |
+| **1.20.6** | `mc1206` | `1.20.5` - `1.20.6` | ✅ Fully Supported |
+| **1.21.1** | `mc1211` | `1.21.0` - `1.21.4` | ✅ Fully Supported |
+| **26.2** | `mc262` | `>=26.2` | ✅ Fully Supported |
 
 ---
 
-## Build Artifacts
+## Optimization Methods Researched from Popular Mods
 
-The built distribution JARs are located in:
+Sodium Improver studies and incorporates core algorithms from top-tier rendering mods:
+1. **Dynamic Frustum & Visual Edge Padding (from EntityCulling)**: Bounding boxes are padded by 0.25 blocks before frustum visibility checks, preventing mob extremities (wings, arms, tails) from popping at screen edges.
+2. **Glowing & Boss Protection (from EntityCulling)**: Spectral outlines and bosses (Ender Dragon, Wither) are never culled, preserving critical gameplay visuals.
+3. **Directional Backface Culling (from More Culling)**: Directional normal vectors for Item Frames, Wall Signs, and Paintings are tested against the camera vector. If the camera is behind the mounting wall, rendering is culled instantly.
+4. **Chunk-Baked Mesh Detection (from Enhanced Block Entities)**: Skips dispatcher-level culling when EBE converts chests and bells into Sodium-rendered chunk meshes.
+
+---
+
+## Build Distribution JARs
+
+All distribution JARs are compiled and packaged in each subproject's `build/libs` directory:
+- `mc1165/build/libs/SodiumImprover-mc1.16.5-1.0.0.jar`
+- `mc1171/build/libs/SodiumImprover-mc1.17.1-1.0.0.jar`
+- `mc1182/build/libs/SodiumImprover-mc1.18.2-1.0.0.jar`
+- `mc1194/build/libs/SodiumImprover-mc1.19.4-1.0.0.jar`
 - `mc1201/build/libs/SodiumImprover-mc1.20.1-1.0.0.jar`
+- `mc1206/build/libs/SodiumImprover-mc1.20.6-1.0.0.jar`
 - `mc1211/build/libs/SodiumImprover-mc1.21.1-1.0.0.jar`
+- `mc262/build/libs/SodiumImprover-mc26.2-1.0.0.jar`
 - `common/build/libs/SodiumImprover-common-1.0.0.jar`
 
-To build again:
+To build all JARs in one command:
 ```powershell
 .\gradlew.bat build
 ```

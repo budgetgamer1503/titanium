@@ -63,13 +63,27 @@ public final class CullingEngine {
             return true;
         }
 
-        if (!FRUSTUM.isBoxVisible(minX, minY, minZ, maxX, maxY, maxZ)) {
+        double pad = 0.25;
+        if (!FRUSTUM.isBoxVisible(minX - pad, minY - pad, minZ - pad, maxX + pad, maxY + pad, maxZ + pad)) {
             culledEntitiesThisFrame++;
             return true;
         }
 
         renderedEntitiesThisFrame++;
         return false;
+    }
+
+    public static boolean isBackfaceCulled(double x, double y, double z, double normalX, double normalY, double normalZ) {
+        double camX = FRUSTUM.getCameraX();
+        double camY = FRUSTUM.getCameraY();
+        double camZ = FRUSTUM.getCameraZ();
+
+        double toCamX = camX - x;
+        double toCamY = camY - y;
+        double toCamZ = camZ - z;
+
+        double dot = toCamX * normalX + toCamY * normalY + toCamZ * normalZ;
+        return dot < 0.0;
     }
 
     public static boolean shouldCullBlockEntity(
@@ -79,6 +93,11 @@ public final class CullingEngine {
     ) {
         ImproverConfig config = ConfigManager.getConfig();
         if (!config.tileEntityCullingEnabled) {
+            renderedBlockEntitiesThisFrame++;
+            return false;
+        }
+
+        if (CompatibilityManager.shouldSkipBlockEntityCulling(type)) {
             renderedBlockEntitiesThisFrame++;
             return false;
         }
