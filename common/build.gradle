@@ -8,5 +8,5 @@ dependencies {
 }
 
 jar {
-    archiveBaseName = 'SodiumImprover-common'
+    archiveBaseName = 'Titanium-common'
 }

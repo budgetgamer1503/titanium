@@ -1,25 +1,25 @@
 {
   "schemaVersion": 1,
-  "id": "sodiumimprover",
+  "id": "titanium",
   "version": "1.0.0",
-  "name": "Sodium Improver",
+  "name": "Titanium",
   "description": "Extreme FPS Booster & Renderer Optimizer companion for Sodium by budgetgamer1503",
   "authors": [
     "budgetgamer1503"
   ],
   "contact": {
-    "homepage": "https://github.com/budgetgamer1503/SodiumImprover"
+    "homepage": "https://github.com/budgetgamer1503/Titanium"
   },
   "license": "LGPL-3.0",
-  "icon": "assets/sodiumimprover/icon.png",
+  "icon": "assets/titanium/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "net.budgetgamer.sodiumimprover.v1201.SodiumImprover1201"
+      "net.budgetgamer.titanium.v1201.Titanium1201"
     ]
   },
   "mixins": [
-    "sodiumimprover.mixins.json"
+    "titanium.mixins.json"
   ],
   "custom": {
     "modmenu": {

@@ -9,7 +9,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'SodiumImprover'
+rootProject.name = 'Titanium'
 
 include 'common'
 include 'mc1165'

@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.budgetgamer.titanium.v1171.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "client": [
+    "culling.EntityRenderDispatcherMixin",
+    "culling.BlockEntityRenderDispatcherMixin",
+    "culling.ParticleManagerMixin",
+    "culling.WorldRendererMixin",
+    "gui.Sodium05OptionsGUIMixin",
+    "gui.Sodium06OptionsGUIMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

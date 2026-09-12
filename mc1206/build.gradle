@@ -9,7 +9,7 @@ dependencies {
 }
 
 jar {
-    archiveBaseName = 'SodiumImprover-mc1.20.6'
+    archiveBaseName = 'Titanium-mc1.20.6'
     from {
         project(':common').sourceSets.main.output
     }
