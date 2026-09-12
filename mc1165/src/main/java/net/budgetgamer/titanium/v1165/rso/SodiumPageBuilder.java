@@ -17,7 +17,6 @@ public final class SodiumPageBuilder {
 
     private SodiumPageBuilder() {}
 
-    @SuppressWarnings("unchecked")
     public static void injectTitaniumPage(Object gui) {
         if (gui == null) {
             return;
