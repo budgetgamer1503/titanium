@@ -74,21 +74,3 @@ Titanium studies and incorporates core algorithms from top-tier rendering mods:
 4. **Chunk-Baked Mesh Detection (from Enhanced Block Entities)**: Skips dispatcher-level culling when EBE converts chests and bells into Sodium-rendered chunk meshes.
 
 ---
-
-## Build Distribution JARs
-
-All distribution JARs are compiled and packaged in each subproject's `build/libs` directory:
-- `mc1165/build/libs/Titanium-mc1.16.5-1.0.0.jar`
-- `mc1171/build/libs/Titanium-mc1.17.1-1.0.0.jar`
-- `mc1182/build/libs/Titanium-mc1.18.2-1.0.0.jar`
-- `mc1194/build/libs/Titanium-mc1.19.4-1.0.0.jar`
-- `mc1201/build/libs/Titanium-mc1.20.1-1.0.0.jar`
-- `mc1206/build/libs/Titanium-mc1.20.6-1.0.0.jar`
-- `mc1211/build/libs/Titanium-mc1.21.1-1.0.0.jar`
-- `mc262/build/libs/Titanium-mc26.2-1.0.0.jar`
-- `common/build/libs/Titanium-common-1.0.0.jar`
-
-To build all JARs in one command:
-```powershell
-.\gradlew.bat build
-```
